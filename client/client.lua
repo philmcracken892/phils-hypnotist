@@ -1,7 +1,7 @@
 local RSGCore = exports['rsg-core']:GetCoreObject()
 local isPlaying = false
 
-
+-- Function to show the hipwatch menu
 local function ShowHipwatchMenu()
     ExecuteCommand('closeInv')
     lib.registerContext({
@@ -21,7 +21,7 @@ local function ShowHipwatchMenu()
     lib.showContext('hipwatch_selection_menu')
 end
 
-
+-- Handle ox_lib notifications
 RegisterNetEvent('rsg-hipwatch:client:notify', function(data)
     lib.notify({
         title = data.title,
@@ -30,7 +30,7 @@ RegisterNetEvent('rsg-hipwatch:client:notify', function(data)
     })
 end)
 
-
+-- Handle hipwatch animation with looping
 RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
     if isPlaying then return end
     isPlaying = true
@@ -43,12 +43,12 @@ RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
         type = 'info'
     })
 
-    
+    -- Thread to handle animation looping
     CreateThread(function()
         while isPlaying do
             ClearPedTasks(ped)
             TaskEmote(ped, 0, 2, joaat(emoteType), true, true, true, true, true)
-            Wait(5000) 
+            Wait(10000) -- Duration of one animation cycle
             if isPlaying then
                 TriggerServerEvent('rsg-hipwatch:server:ragdollClosestPlayer', GetEntityCoords(ped))
             end
@@ -58,7 +58,7 @@ RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
         TaskClearLookAt(ped)
     end)
 
-    
+    -- Thread to handle E key press to stop
     CreateThread(function()
         while isPlaying do
             if IsControlJustPressed(0, 0xCEFD9220) then -- E key
@@ -69,27 +69,28 @@ RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
         end
     end)
 
-   
+    -- Thread to handle 30-second timeout
     CreateThread(function()
-        Wait(60000)
+        Wait(30000)
         if isPlaying then
             isPlaying = false
         end
     end)
 end)
 
-
+-- Handle sleep animation for affected players
 RegisterNetEvent('rsg-hipwatch:client:ragdollPlayer', function()
     local ped = PlayerPedId()
-    SetPedToRagdoll(ped, 2000, 2000, 0, true, true, false)
+    ClearPedTasksImmediately(ped) -- Clear existing tasks
+    TaskStartScenarioInPlace(ped, joaat('world_human_sleep_ground_arm'), 5000, true, false, false, false) -- Play sleep animation for 5 seconds
     lib.notify({
         title = 'Hypnotized!',
-        description = 'You were affected by a hipwatch and fell to the ground!',
+        description = 'You were hypnotized by a hipwatch and fell asleep!',
         type = 'inform'
     })
 end)
 
-
+-- Clean up when resource stops
 AddEventHandler('onResourceStop', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
     if isPlaying then
