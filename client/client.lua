@@ -22,60 +22,58 @@ local function ShowHipwatchMenu()
 end
 
 
+RegisterNetEvent('rsg-hipwatch:client:notify', function(data)
+    lib.notify({
+        title = data.title,
+        description = data.description,
+        type = data.type
+    })
+end)
+
+
 RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
     if isPlaying then return end
     isPlaying = true
     local ped = PlayerPedId()
-    
-    
     local emoteType = 'KIT_EMOTE_ACTION_HYPNOSIS_POCKET_WATCH_1'
-    
-   
-    
-   
-    ClearPedTasks(ped)
-    
-   
-    TaskEmote(ped, 0, 2, joaat(emoteType), true, true, true, true, true)
-	Wait(10000)
-    
-  
-    TriggerServerEvent('rsg-hipwatch:server:ragdollClosestPlayer', GetEntityCoords(ped))
-    
+
     lib.notify({
         title = 'Using Hipwatch',
         description = 'Press [E] to stop using',
         type = 'info'
     })
+
     
+    CreateThread(function()
+        while isPlaying do
+            ClearPedTasks(ped)
+            TaskEmote(ped, 0, 2, joaat(emoteType), true, true, true, true, true)
+            Wait(10000) 
+            if isPlaying then
+                TriggerServerEvent('rsg-hipwatch:server:ragdollClosestPlayer', GetEntityCoords(ped))
+            end
+        end
+        ClearPedTasksImmediately(ped)
+        ClearPedSecondaryTask(ped)
+        TaskClearLookAt(ped)
+    end)
+
     
     CreateThread(function()
         while isPlaying do
             if IsControlJustPressed(0, 0xCEFD9220) then -- E key
                 isPlaying = false
-                ClearPedTasksImmediately(ped)
-                ClearPedSecondaryTask(ped)
-                TaskClearLookAt(ped)
-               
-              
-                
                 break
             end
             Wait(0)
         end
     end)
-    
-    
+
+   
     CreateThread(function()
         Wait(30000)
         if isPlaying then
             isPlaying = false
-            ClearPedTasksImmediately(ped)
-            ClearPedSecondaryTask(ped)
-            TaskClearLookAt(ped)
-            
-           
-        
         end
     end)
 end)
@@ -103,7 +101,10 @@ AddEventHandler('onResourceStop', function(resourceName)
     end
 end)
 
-
+-- Open hipwatch menu
+RegisterNetEvent('rsg-hipwatch:client:openHipwatchMenu', function()
+    ShowHipwatchMenu()
+end)
 RegisterNetEvent('rsg-hipwatch:client:openHipwatchMenu', function()
     ShowHipwatchMenu()
 end)
