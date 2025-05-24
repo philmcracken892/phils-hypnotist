@@ -30,7 +30,7 @@ RegisterNetEvent('rsg-hipwatch:server:ragdollClosestPlayer', function(userCoords
         TriggerClientEvent('rsg-hipwatch:client:ragdollPlayer', closestPlayer)
         TriggerClientEvent('rsg-hipwatch:client:notify', src, {
             title = 'Hipwatch',
-            description = 'Successfully hypnotized nearby player!',
+            description = 'Successfully hypnotized nearby player! press E to cancel hypnosis',
             type = 'success'
         })
     else
