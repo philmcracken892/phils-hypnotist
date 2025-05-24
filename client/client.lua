@@ -48,7 +48,7 @@ RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
         while isPlaying do
             ClearPedTasks(ped)
             TaskEmote(ped, 0, 2, joaat(emoteType), true, true, true, true, true)
-            Wait(10000) 
+            Wait(5000) 
             if isPlaying then
                 TriggerServerEvent('rsg-hipwatch:server:ragdollClosestPlayer', GetEntityCoords(ped))
             end
@@ -71,7 +71,7 @@ RegisterNetEvent('rsg-hipwatch:client:playHipwatch', function()
 
    
     CreateThread(function()
-        Wait(30000)
+        Wait(60000)
         if isPlaying then
             isPlaying = false
         end
@@ -102,9 +102,6 @@ AddEventHandler('onResourceStop', function(resourceName)
 end)
 
 -- Open hipwatch menu
-RegisterNetEvent('rsg-hipwatch:client:openHipwatchMenu', function()
-    ShowHipwatchMenu()
-end)
 RegisterNetEvent('rsg-hipwatch:client:openHipwatchMenu', function()
     ShowHipwatchMenu()
 end)
