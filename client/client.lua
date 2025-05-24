@@ -82,7 +82,7 @@ end)
 RegisterNetEvent('rsg-hipwatch:client:ragdollPlayer', function()
     local ped = PlayerPedId()
     ClearPedTasksImmediately(ped) -- Clear existing tasks
-    TaskStartScenarioInPlace(ped, joaat('world_human_sleep_ground_arm'), 5000, true, false, false, false) -- Play sleep animation for 5 seconds
+    TaskStartScenarioInPlace(ped, joaat('world_human_sleep_ground_arm'), 20000, true, false, false, false) -- Play sleep animation for 5 seconds
     lib.notify({
         title = 'Hypnotized!',
         description = 'You were hypnotized by a hipwatch and fell asleep!',
