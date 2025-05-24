@@ -1,0 +1,1 @@
+hipwatch = { name = 'hipwatch', label = 'hipwatch', weight = 1, type = 'item', image = 'hipwatch.png', unique = false, useable = true, shouldClose = false, description = 'hynotise people' },
