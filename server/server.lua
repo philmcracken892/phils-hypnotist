@@ -41,6 +41,3 @@ RegisterNetEvent('rsg-hipwatch:server:ragdollClosestPlayer', function(userCoords
         })
     end
 end)
-        TriggerClientEvent('RSGCore:Notify', src, 'No players nearby to hypnotize.', 'error')
-    end
-end)
